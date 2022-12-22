@@ -68,7 +68,7 @@ function base64url_encode($hash)
 
 function verifyCookieToken(){
     $key = '1234567';
-    if  (!$_COOKIE['jwt']) {
+    if  (!isset($_COOKIE['jwt'])) {
         return false;
     } else
         return (getTokenPayload($key,$_COOKIE['jwt']));

@@ -16,7 +16,7 @@ if (chech_auth()) {
 $user = verifyCookieToken();
 
 ?>
-<?php if ($user)  { ?>
+<?php if (($user))  { ?>
 
     <h1>Welcome back, <?=htmlspecialchars($user->username)?>!</h1>
 
@@ -24,7 +24,7 @@ $user = verifyCookieToken();
         <button type="submit" class="btn btn-primary">Logout</button>
     </form>
 
-<?php } else { ?>
+<?php } else if (!$user) { ?>
 <h1 class="mb-5">Registration</h1>
 <?php flash(); ?>
 <form method="post" action="do_register.php">
