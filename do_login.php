@@ -16,11 +16,9 @@ unset($user['password']);
 
 $user['iat'] = time();
 $key = 1234567;
-
 $token = createTokenHS256($user,$key);
-
 setcookie('jwt', $token, time()+3600);
-phpinfo();
+ header('Location: index.php');
 /*
 if (password_verify($_POST['password'], $user['password'])){
 

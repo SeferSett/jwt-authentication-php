@@ -2,6 +2,6 @@
 
 require_once 'boot.php';
 
-$_COOKIE['user_id'] = null;
+setcookie('jwt','', 1);
 
 header('Location: /');

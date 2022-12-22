@@ -12,13 +12,13 @@ if (chech_auth()) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 */
-if (verifyCookieToken()) {
 
-}
+$user = verifyCookieToken();
+
 ?>
-<?php if ($user) { ?>
+<?php if ($user)  { ?>
 
-    <h1>Welcome back, <?=htmlspecialchars($user['username'])?>!</h1>
+    <h1>Welcome back, <?=htmlspecialchars($user->username)?>!</h1>
 
     <form class="mt-5" method="post" action="do_logout.php">
         <button type="submit" class="btn btn-primary">Logout</button>
