@@ -1,5 +1,5 @@
 <?php
-require 'decodeJWT.php';
+require_once 'decodeJWT.php';
 
 function pdo(): PDO {
     static $pdo;
@@ -14,17 +14,17 @@ function pdo(): PDO {
 }
 function flash (?string $message = null){
     if ($message) {
-        $_SESSION['flash'] = $message;
+        $_COOKIE['flash'] = $message;
     } else {
-        if (!empty($_SESSION['flash'])) { ?>
+        if (!empty($_COOKIE['flash'])) { ?>
         <div class="alert alert-danger mb-3">
-            <?=$_SESSION['flash']?>
+            <?=$_COOKIE['flash']?>
         </div>
         <?php }
-        unset($_SESSION['flash']);
+        unset($_COOKIE['flash']);
     }
 }
 
 function chech_auth(): bool{
-    return !!($_SESSION['user_id'] ?? false);
+    return !!($_COOKIE['user_id'] ?? false);
 }

@@ -5,11 +5,15 @@ require_once 'decodeJWT.php';
 $user = null;
 
 
-
+/*
 if (chech_auth()) {
     $stmt = pdo()->prepare("SELECT * FROM `users` WHERE `id` =:id");
-    $stmt->execute(['id' => $_SESSION['user_id']]);
+    $stmt->execute(['id' => $_COOKIE['user_id']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+*/
+if (verifyCookieToken()) {
+
 }
 ?>
 <?php if ($user) { ?>
