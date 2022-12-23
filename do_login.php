@@ -1,8 +1,10 @@
 <?php
 require_once 'decodeJWT.php';
 require_once 'boot.php';
+
+
 $stmt = pdo()->prepare("SELECT * FROM `users` WHERE `username` = :username");
-$stmt->execute(['username' => $_POST['username']]);
+$stmt->execute(['username' => $_POST['login']]);
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -18,7 +20,14 @@ $user['iat'] = time();
 $key = 1234567;
 $token = createTokenHS256($user,$key);
 setcookie('jwt', $token, time()+3600);
+$refreshToken = createRefreshToken();
+setcookie('rjwt', $refreshToken, time()+10800);
  header('Location: index.php');
+
+
+
+
+
 /*
 if (password_verify($_POST['password'], $user['password'])){
 

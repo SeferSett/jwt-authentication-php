@@ -2,9 +2,7 @@
 require_once 'vendor/autoload.php';
 
 
-$key = 'your-256-bit-secret'; // ваш ключ
-$jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxODIzMTQ2MTYxNn0.hAZrTVyVoQCaFT2HlFORan1KFFk0uBslSNlEjrEea5s';
- // $jwtArr = array_combine(['header', 'payload', 'signature'], explode('.', $jwtToken));
+
 
 
 function getTokenPayload($key,$jwtToken)
@@ -46,7 +44,7 @@ function getTokenPayload($key,$jwtToken)
 function createTokenHS256($payload, $key) {
     $header = [
         'alg' => 'HS256',
-        'typ' => 'JWT'
+        'typ' => 'JWT',
     ];
     $header_b64 = base64url_encode(json_encode($header));
 
@@ -65,12 +63,22 @@ function base64url_encode($hash)
     return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($hash));
 }
 
-
+function createRefreshToken(int $length = 21): string {
+    return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode(openssl_random_pseudo_bytes($length)));
+}
 function verifyCookieToken(){
     $key = '1234567';
     if  (!isset($_COOKIE['jwt'])) {
-        return false;
+        if (!isset($refreshToken)) {
+            return false;
+        }
+        return createRefreshToken();
+
     } else
         return (getTokenPayload($key,$_COOKIE['jwt']));
 
 }
+
+function updateRefreshToken(){
+        return false;
+    }
