@@ -87,7 +87,7 @@ function updateRefreshToken(){
         setcookie('rjwt','', 1);
         return false;
     }
-    if ($token_info->expire>time()){
+    if ($token_info->expire<time()){
         $stmt = pdo()->prepare("DELETE FROM `refresh_token` WHERE `refresh_token` =?");
         $stmt->execute([$_COOKIE['rjwt']]);
         setcookie('rjwt', '', 1);
