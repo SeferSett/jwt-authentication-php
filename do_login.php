@@ -3,8 +3,8 @@ require_once 'decodeJWT.php';
 require_once 'boot.php';
 
 
-$stmt = pdo()->prepare("SELECT * FROM `users` WHERE `id` = ?");
-$stmt->execute([$user['id']]);
+$stmt = pdo()->prepare("SELECT * FROM `users` WHERE `username` = :username");
+$stmt->execute(['username' => $_POST['username']]);
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -22,7 +22,7 @@ $token = createTokenHS256($user,$key);
 setcookie('jwt', $token, time()+3600);
 $refreshToken = createRefreshToken();
 setcookie('rjwt', $refreshToken, time()+10800);
-$stmt = pdo()->prepare("INSERT INTO  `refresh_token` WHERE (`user_id`, `refresh_token`, `expire`, `created_at`) VALUES (?,?,?,?)");
+$stmt = pdo()->prepare("INSERT INTO  `refresh_token`  (`user_id`, `refresh_token`, `expire`, `created_at`) VALUES (?,?,?,?)");
 $stmt->execute([$user['id'], $refreshToken,time()+10800, time()]);
  header('Location: index.php');
 
