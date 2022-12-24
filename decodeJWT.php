@@ -1,7 +1,7 @@
 <?php
 require_once 'vendor/autoload.php';
 
-
+require_once 'boot.php';
 
 
 
@@ -69,10 +69,10 @@ function createRefreshToken(int $length = 21): string {
 function verifyCookieToken(){
     $key = '1234567';
     if  (!isset($_COOKIE['jwt'])) {
-        if (!isset($refreshToken)) {
+        if (!isset($_COOKIE['rjwt'])) {
             return false;
         }
-        return createRefreshToken();
+        return updateRefreshToken();
 
     } else
         return (getTokenPayload($key,$_COOKIE['jwt']));
@@ -80,5 +80,29 @@ function verifyCookieToken(){
 }
 
 function updateRefreshToken(){
+    $stmt = pdo()->prepare("SELECT * FROM `refresh_token` WHERE `refresh_token` = ?");
+    $stmt->execute([$_COOKIE['rjwt']]);
+    $token_info = $stmt->fetchObject();
+    if (!isset($token_info)){
+        setcookie('rjwt','', 1);
         return false;
     }
+    if ($token_info->expire->time()){
+        $stmt = pdo()->prepare("DELETE FROM `refresh_token` WHERE `refresh_token` =?");
+        $stmt->execute([$_COOKIE['rjwt']]);
+        setcookie('rjwt', '', 1);
+        return false;
+        }
+        $stmt = pdo()->prepare("SELECT * FROM `users` WHERE `id` = :id");
+        $stmt->execute(['id' => $token_info->user_id]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user['iat'] = time();
+        $key = 1234567;
+        $token = createTokenHS256($user,$key);
+        setcookie('jwt', $token, time()+3600);
+        $refreshToken = createRefreshToken();
+        setcookie('rjwt', $refreshToken, time()+10800);
+        $stmt = pdo()->prepare("UPDATE refresh_token SET refresh_token=?, expire=?, created_at=? WHERE refresh_token=?");
+        $stmt->execute([$refreshToken,time()+10800, time(), $token_info->refresh_token]);
+        return  $user;
+}
