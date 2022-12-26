@@ -19,6 +19,6 @@ if (chech_auth()) {
     </div>
     <div class="d-flex justify-content-between">
         <button type="submit" class="btn btn-primary">Login</button>
-        <a class="btn btn-outline-primary" href="index.php">Register</a>
+        <a class="btn btn-outline-primary" href="register.php">Register</a>
     </div>
 </form>

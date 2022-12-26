@@ -3,7 +3,7 @@
 
 require_once 'boot.php';
 ?>
-
+<h1 class="mb-5">Register</h1>
 <form method="post" action="do_register.php">
   <div class="mb-3">
     <label for="username" class="form-label">Username</label>
